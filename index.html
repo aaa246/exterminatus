@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+  <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+  <title>Hello World!</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+  <p class="description">Русский сайт, иди нахуй!</p>
+  
+  <div class="space">
+    <label class="field-label" for="ip">Налаштування:</label>
+    <br/>
+    <textarea class="field-input" id="config" name="config" required></textarea>
+  </div>
+
+  <button id="start-action" class="action-button">Паляниця!</button>
+  <button id="stop-action" class="action-button">Зупинити</button>
+</body>
+
+</html>
