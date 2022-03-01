@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <title>Hello World!</title>
+    <link rel="stylesheet" href="main.css">
+  </head>
+  <body>
+    <p class="description">Русский корабль, иди нахуй</p>
+    <label class="field-label" for="ip">IP:</label>
+    <input class="field-input" id="ip" name="ip" type="text" placeholder="194.54.14.187" required />
+
+    <label class="field-label" for="port">Port:</label>
+    <input class="field-input" id="port" name="port" type="number" value="80" required />
+
+    <label class="field-label" for="source">Attack via:</label>
+    <select class="field-source" id="source">
+      <option value="dripper">docker + DRipper</option>
+      <option value="bombardier">docker + Bombardier</option>
+    </select>
+
+    <button id="start-action" class="action-button">ATTACK</button>
+    <button id="stop-action" class="action-button">STOP</button>
+  </body>
+</html>
