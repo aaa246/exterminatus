@@ -22,12 +22,15 @@ jobs:
       - run: yarn
       - run: yarn make
 
+      - name: See inside
+        run: cd out/make/deb/x64 && ls
+
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/v')
         with:
           files: |
-            "out/**/*.deb"
-            "out/**/*Setup.exe"
+            out/**/*.deb
+            out/**/*Setup.exe
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

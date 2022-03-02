@@ -1,6 +1,7 @@
 const exterminatus = require('./exterminatus').default;
 if (process.platform === 'darwin') {
   process.env.PATH = '/usr/local/bin/';
+  process.env.TERM = 'vt100';
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -8,6 +9,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const stop = document.getElementById('stop-action');
   const error = document.getElementById('config-error');
   const getConfigElem = () => document.getElementById('config');
+  getConfigElem().value = `{ "ip": "185.72.228.100", "port": 80, "mode": "http", "threads": 100, "containers": 20 }`;
 
   function getValues() {
     return getConfigElem().value;
@@ -41,6 +43,11 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   document.addEventListener('STOP', () => {
+    start.classList.remove('disabled');
+    start.disabled = false;
+  });
+
+  document.addEventListener('START_SUCCESS', () => {
     start.classList.remove('disabled');
     start.disabled = false;
   });

