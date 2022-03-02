@@ -34,4 +34,14 @@ window.addEventListener('DOMContentLoaded', () => {
   stop.addEventListener('click', () => {
     exterminatus.killContainers();
   });
+
+  document.addEventListener('START', () => {
+    start.classList.add('disabled');
+    start.disabled = true;
+  });
+
+  document.addEventListener('STOP', () => {
+    start.classList.remove('disabled');
+    start.disabled = false;
+  });
 });
