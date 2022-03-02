@@ -3,31 +3,35 @@ if (process.platform === 'darwin') {
   process.env.PATH = '/usr/local/bin/';
 }
 
-function getValues() {
-  return  document.getElementById('config').value;
-}
-
 window.addEventListener('DOMContentLoaded', () => {
-  const replaceText = (selector, text) => {
-    const element = document.getElementById(selector)
-    if (element) element.innerText = text
-  }
-
-  for (const dependency of ['chrome', 'node', 'electron']) {
-    replaceText(`${dependency}-version`, process.versions[dependency])
-  }
-
   const start = document.getElementById('start-action');
   const stop = document.getElementById('stop-action');
+  const error = document.getElementById('config-error');
+  const getConfigElem = () => document.getElementById('config');
 
+  function getValues() {
+    return getConfigElem().value;
+  }
+
+  function onUpdate () {
+    try {
+      JSON.parse(getValues());
+      error.classList.add('hidden');
+    } catch (err) {
+      error.classList.remove('hidden');
+      console.error(err);
+    }
+  }
+
+  getConfigElem().addEventListener('change', () => onUpdate());
+  getConfigElem().addEventListener('keyup', () => onUpdate());
+  
   start.addEventListener('click', () => {
     const config = JSON.parse(getValues());
     exterminatus.attack(config);
   });
 
   stop.addEventListener('click', () => {
-    const config = JSON.parse(getValues());
-    const { containers } = config;
-    exterminatus.killContainers(containers);
+    exterminatus.killContainers();
   });
 });

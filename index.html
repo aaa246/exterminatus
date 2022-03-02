@@ -12,12 +12,18 @@
 
 <body>
   <p class="description">Русский сайт, иди нахуй!</p>
-  
-  <div class="space">
-    <label class="field-label" for="ip">Налаштування:</label>
-    <br/>
+
+  <div class="space" id="config-container">
+    <label class="field-label" for="ip">
+      Налаштування:
+      <br/>
+      <span class="error hidden" id="config-error">Дані не файні!</span>
+    </label>
+    <br />
     <textarea class="field-input" id="config" name="config" required></textarea>
   </div>
+
+  <div class="space" id="config-container"></div>
 
   <button id="start-action" class="action-button">Паляниця!</button>
   <button id="stop-action" class="action-button">Зупинити</button>

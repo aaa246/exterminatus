@@ -20,6 +20,14 @@ body {
     height: 100px;
 }
 
+.error {
+    color: red;
+}
+
+.hidden {
+    opacity: 0;
+}
+
 .space {
     padding: 20px 0;
 }
