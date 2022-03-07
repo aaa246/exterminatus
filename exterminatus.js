@@ -1,5 +1,5 @@
 const util = require('util');
-const { exec, spawn } = require('child_process');
+const { exec, spawn, execSync } = require('child_process');
 const execAsync = util.promisify(exec);
 
 const STATUS = {
@@ -57,7 +57,21 @@ class Exterminatus {
   }
 
   async killContainers() {
-    const cmd = `docker kill $(docker ps -q) && docker image rm -f alexmon1989/dripper`;
+    let cmd = '';
+    const result = await new Promise((res) => {
+      exec('docker ps -q', (error, stdout, stderr) => {
+        if (stdout) {
+          res(stdout);
+        }
+      })
+    });
+    if (result) {
+      const containers = result.split('\n').join(' ');
+      if (containers.length) {
+        cmd = `docker kill ${containers} && `;
+      }
+    }
+    cmd += 'docker image prune -f';
     console.info(`running command: ${cmd}`);
     exec(cmd, (error, stdout) => {
       if (error) {
